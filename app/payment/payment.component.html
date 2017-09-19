@@ -1,0 +1,69 @@
+<div>
+  <form [formGroup]="paymentForm" (ngSubmit)="submitForm()" novalidate>
+
+    <div class="form-group">
+      <label for="cardholdername">Name on Card</label>
+      <input type="text" class="form-control" placeholder="Please enter name" formControlName="cardholdername">
+  
+        <div class="alert alert-danger" *ngIf="cardholdernameControl.errors && cardholdernameControl.touched">
+            <div *ngIf="cardholdernameControl.errors.required">Card Holder name is required.</div>
+            <div *ngIf="cardholdernameControl.errors.pattern">Only alphabets are allowed.</div>
+        </div>
+    </div>
+
+   <div class="form-group">
+      <label for="cardnumber">Card Number</label>
+      <input class="form-control" type="text" placeholder="Please enter number " formControlName="cardnumber">
+      
+    <div class="alert alert-danger" *ngIf="cardnumberControl.errors && cardnumberControl.touched">
+            <div *ngIf="cardnumberControl.errors.required">Card Number is required.</div>
+    <div *ngIf="cardnumberControl.errors.minlength || cardnumberControl.errors.maxlength
+                || cardnumberControl.errors.pattern">Invalid Card Number.</div>
+    </div>
+    </div>
+
+    <div class="form-group expiry">
+      <label>Date of Expiration</label>
+      <input class="form-control month" type="text" placeholder="00" formControlName="month">
+      <input class="form-control year" type="text" placeholder="2017" formControlName="year">
+      
+    <div class="alert alert-danger" *ngIf="monthControl.errors && monthControl.touched">
+    <div *ngIf="monthControl.errors.minlength || monthControl.errors.maxlength
+                || monthControl.errors.pattern">Invalid Date of Expiration.</div>
+    </div>
+    
+    <div class="alert alert-danger" *ngIf="yearControl.errors && yearControl.touched">
+    <div *ngIf="yearControl.errors.minlength || yearControl.errors.maxlength
+                || yearControl.errors.pattern">Invalid Date of Expiration.</div>
+    </div>
+      
+    </div>
+
+    <div class="form-group cvc">
+      <label for = "cvv">CVV/CVC</label>
+      <input class="form-control" type="text" placeholder="123" formControlName="cvv">
+      
+    <div class="alert alert-danger" *ngIf="cvvControl.errors && cvvControl.touched">
+    <div *ngIf="cvvControl.errors.minlength || cvvControl.errors.maxlength
+                || cvvControl.errors.pattern">Invalid CVV / CVC Number.</div>
+    </div>
+      
+    </div>
+    
+
+    <div class="form-group">
+<!--      <button type="submit" class="btn btn-primary">Submit</button>
+-->      <button type="submit" [disabled]="!paymentForm.valid">Submit</button>
+    </div>
+    <h3 class="center-block text-center" *ngIf="success && paymentForm.valid">Payment Successful! Thanks for booking ticket. Your Ticket will be send to your Email</h3>
+    
+    <h3 class="center-block text-center" *ngIf="failed  && paymentForm.invalid">Payment Failed! Please try again</h3>
+ <div *ngIf="homepage" >
+
+  <nav>
+<a routerLink="/mainhome" routerLinkActive="active">HOME</a>  
+  </nav>
+  </div>
+  </form>
+  
+</div>

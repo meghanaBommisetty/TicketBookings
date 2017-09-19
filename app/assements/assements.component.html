@@ -1,0 +1,199 @@
+ <div id="header">
+       <header>
+     <ul>
+     <li> <span class="right_header">Welcome {{currentUser.firstName}} | {{today | date}} | <a [routerLink]="['/login']">Logout</a> </span></li>
+        <li><span class="main_header" >Make My Trip</span></li>    
+            </ul>
+                        <img src = "http://img1.sendscraps.com/se/053/dussehra_003.gif" width="1000" height="100"/>
+
+            </header>
+   </div>
+  <nav>
+<a routerLink="/mainhome" routerLinkActive="active">Home</a>   
+<a routerLink="/assements" routerLinkActive="active">Flight Bookings</a>   
+    </nav>
+<div>
+   <h1>Ticket Booking</h1> 
+    <h2>{{currentUser.firstName}}</h2>
+  <div>
+     
+       <div class="form-group">
+   <label>From Destination</label>
+  <input type="fromdest" #fromdest="ngModel" pattern="[a-zA-Z][a-zA-Z ]+" required  class="form-control"  placeholder="Leaving From" name="fromdest" ngModel>
+       <div *ngIf="fromdest.errors && (fromdest.dirty || fromdest.touched)" class="alert alert-danger">
+      <div [hidden]="!fromdest.errors.required "> Please Enter  Departure City </div>
+       <div [hidden]="!fromdest.errors.pattern "> Please Enter Valid  Departure City</div>
+       </div>
+
+
+   </div>
+   
+       <div class="form-group">
+   <label>To Destination</label>
+    <input type="todest" #todest="ngModel" pattern="[a-zA-Z][a-zA-Z ]+" required  class="form-control"  placeholder="Going To" name="todest" ngModel>
+       <div *ngIf="todest.errors && (todest.dirty || todest.touched)" class="alert alert-danger">
+      <div [hidden]="!todest.errors.required "> Please Enter  Destination City</div>
+       <div [hidden]="!todest.errors.pattern "> Please Enter Valid  Destination City</div>
+       </div>
+  
+   </div>
+   
+    <div class="form-group">
+   <label>Date of journey</label>
+  <input class="alert-input date-input" name="fromdate" [min]="todaydate" type="date" #fromdate>
+  
+   </div>
+   
+       <div class="form-group">
+   <label>Date of Return(optional)</label>
+   <input class="alert-input date-input" name="todate" [min]="todaydate" type="date" #todate>
+  
+   </div>
+   
+ <div class="form-group">
+  <label>Name</label>
+    <input class="form-control" [(ngModel)]="currentUser.firstName"  placeholder="name" #name/>
+   </div>
+   <div class="form-group">
+   <label>Gender</label>
+   <input type="radio" name="gender" value="male" id = "male"  checked required #gender> Male
+  <input type="radio" name="gender" value="female" id = "female" required #gender> Female
+  
+  </div>
+  
+  
+  <div class="form-group">
+        <label for="phone">Mobile Number</label>
+        <input type="text" #mobilenumber="ngModel" pattern="[0-9]*"  minlength="10"
+               maxlength="10" required  class="form-control"  placeholder="Mobilenumber" name="mobilenumber" ngModel>
+       <div *ngIf="mobilenumber.errors && (mobilenumber.dirty || mobilenumber.touched)" class="alert alert-danger">
+      <div [hidden]="!mobilenumber.errors.required "> Please Enter Mobile Number </div>
+       <div [hidden]="!mobilenumber.errors.pattern "> Please Enter Correct Mobile Number</div>
+       <div [hidden]="!mobilenumber.errors.minlength "> Mobile should be 10digit</div>
+    
+       </div>
+  
+    <div class="form-group">
+  <label>Email</label>
+    <input type="email" #email="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" required  class="form-control"  placeholder="Email" name="email" ngModel>
+       <div *ngIf="email.errors && (email.dirty || email.touched)" class="alert alert-danger">
+      <div [hidden]="!email.errors.required "> Please Enter Email </div>
+       <div [hidden]="!email.errors.pattern "> Please Enter Correct Email</div>
+       </div>
+        </div>
+   <div>  
+  <button (click)="onClickAdd(fromdest.value,todest.value,fromdate.value,todate.value,name.value,gender.value,mobilenumber.value,email.value)">Submit</button>
+  </div>
+  
+  </div>
+   </div>
+   <div *ngIf="validation">
+  <h3>Please select Different cities for Departure and Destination </h3>
+  </div>
+  <div *ngIf="validationdate">
+  <h3>Selected Date of Journey should be less than Date of return</h3>
+  </div>
+   <br><br><br>
+<div>
+   <div *ngIf="table" >
+  <table border="1" style="width:100%">
+	<thead>
+		<tr>
+		  		<td><b>ID</b></td>
+			<td><b>From Destination</b></td>
+			<td><b>To Destination</b></td>
+			<td><b>From Date</b></td>
+			<td><b>To Date</b></td>
+			<td><b>Name</b></td>
+		
+		<td><b>Mobile Number</b></td>
+    <td><b>email</b></td>
+			<td><b>Actions</b></td>
+		</tr>
+	</thead>
+	<tbody *ngIf="persons">
+		<tr *ngFor="let person of persons; let i=index">
+			<td>{{i + 1}}</td>
+			<td>{{person.fromdest}}</td>
+			<td>{{person.todest}}</td>
+			<td>{{person.fromdate}}</td>
+			<td>{{person.todate}}</td>
+			<td>{{person.name}}</td>
+		
+						<td>{{person.mobilenumber}}</td>
+
+			<td><a>{{person.email}}</a></td>
+			<td><img (click)="onDelete(person.mobilenumber)" src = "http://images.rdnation.com/leagues/2014/8/6/DELETE-logo-130518047895396250.jpg" height = "50" width = "50"/>
+			<button (click)="onView(person)">View</button>
+	
+		</tr>
+	</tbody>
+  </table>
+  </div>
+  <br><br><br>
+  <div *ngIf="booking" >
+  <table border="1" style="width:100%">
+	<thead>
+		<tr>
+		  		<td><b>Departure</b></td>
+			<td><b>Arrival</b></td>
+			<td><b>Duration</b></td>
+			<td><b>price</b></td>
+			<td><b> </b></td>
+			
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><img src= "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF-jA46mQVHKSUbUfQXxAv5ZRCWdMuhR1ErzbDTcQYBhyoVGL6aFtO7YfO" width = "50" height = "50" /> 5.45 AM</td>
+			<td>7.45AM</td>
+			<td>2hs</td>
+			<td>Rs 2500</td>
+			<td> <a routerLink="/payment" routerLinkActive="active">Book</a></td>
+	
+		</tr>
+			<tr>
+			<td><img src= "http://static.dnaindia.com/sites/default/files/styles/half/public/2017/03/13/556289-ai-airindiaboeing747-013117.jpg?itok=qhifR3yq" width = "50" height = "50"/>8.00AM</td>
+				<td>10.45AM</td>
+			<td>2hrs 45min</td>
+			<td>Rs 2000</td>
+			<td> <a routerLink="/payment" routerLinkActive="active">Book</a></td>
+	
+		</tr>
+		
+			<tr>
+			<td><img src= "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxSsfoWg3Ekmcc9FNs_3jzxoH64dv83x2_u0sBF2GC4nYQ5uTepMYFYA" width = "50" height = "50"/>6.00PM</td>
+				<td>8.45PM</td>
+			<td>2hrs 45min</td>
+			<td>Rs 3000</td>
+			<td> <a routerLink="/payment" routerLinkActive="active">Book</a></td>
+	
+		</tr>
+			<tr>
+			<td><img src= "http://static.dnaindia.com/sites/default/files/styles/half/public/2017/03/13/556289-ai-airindiaboeing747-013117.jpg?itok=qhifR3yq" width = "50" height = "50"/>8.45PM</td>
+				<td>10.45PM</td>
+			<td>2hrs</td>
+			<td>Rs 4000</td>
+			<td> <a routerLink="/payment" routerLinkActive="active">Book</a></td>
+	
+		</tr>
+	</tbody>
+  </table>
+  </div>
+  
+  
+  <div *ngIf="show">
+  <h3>Details of {{person.name}}</h3>
+  <label><b>Name:</b>{{person.name}}</label><br>
+  <label><b>Departure City:</b>{{person.fromdest}}</label><br>
+  <label><b>Destination City:</b>{{person.todest}}</label><br>
+  <label><b>From Date:</b>{{person.fromdate}}</label><br>
+    <label><b>To Date:</b>{{person.todate}}</label><br>
+
+  <label><b>Mobile Number:</b>{{person.mobilenumber}}</label>
+  <label><b>email:</b>{{person.email}}</label>
+  </div>
+  
+</div>
+ 
+  </div>
